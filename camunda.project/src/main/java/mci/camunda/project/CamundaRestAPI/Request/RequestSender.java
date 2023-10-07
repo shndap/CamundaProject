@@ -2,8 +2,7 @@ package mci.camunda.project.CamundaRestAPI.Request;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.http.HttpEntity;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
+import org.apache.http.client.methods.*;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
@@ -37,49 +36,33 @@ public class RequestSender {
         return reader.lines().map(line -> line + "\n").collect(Collectors.joining());
     }
 
-    public static String PUT(String targetURL, HashMap<String, String> body) throws IOException, InterruptedException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        String requestBody = objectMapper
-                .writeValueAsString(body);
+    public static String PUT(String targetURL, MultipartEntityBuilder body) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpPut httpPut = new HttpPut(targetURL);
 
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(targetURL))
-                .PUT(HttpRequest.BodyPublishers.ofString(requestBody))
-                .build();
+        HttpEntity httpEntity = body.build();
+        httpPut.setEntity(httpEntity);
 
-        HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        CloseableHttpResponse response = httpClient.execute(httpPut);
 
-
-        return response.body();
+        return logResponse(response);
     }
 
-    public static String DELETE(String targetURL) throws IOException, InterruptedException {
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(targetURL))
-                .DELETE()
-                .build();
+    public static String DELETE(String targetURL) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpDelete httpPost = new HttpDelete(targetURL);
 
-        HttpResponse<String> response = client.send(request,
-                HttpResponse.BodyHandlers.ofString());
+        CloseableHttpResponse response = httpClient.execute(httpPost);
 
-        return response.body();
+        return logResponse(response);
     }
 
-    public static String GET(String targetURL) throws URISyntaxException, IOException, InterruptedException {
-        HttpClient httpClient = HttpClient.newHttpClient();
+    public static String GET(String targetURL) throws IOException {
+        CloseableHttpClient httpClient = HttpClients.createDefault();
+        HttpGet httpPost = new HttpGet(targetURL);
 
-        HttpRequest httpRequest = HttpRequest.newBuilder()
-                .uri(URI.create(targetURL))
-                .build();
+        CloseableHttpResponse response = httpClient.execute(httpPost);
 
-        HttpResponse<String> response = httpClient.send(
-                httpRequest,
-                HttpResponse.BodyHandlers.ofString()
-        );
-
-        return response.body();
+        return logResponse(response);
     }
 }

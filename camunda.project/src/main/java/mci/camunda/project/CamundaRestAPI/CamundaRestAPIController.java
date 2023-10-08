@@ -1,6 +1,5 @@
 package mci.camunda.project.CamundaRestAPI;
 
-import com.google.gson.JsonObject;
 import mci.camunda.project.CamundaRestAPI.Request.RequestSender;
 import org.apache.http.entity.ContentType;
 import org.apache.http.entity.mime.MultipartEntityBuilder;
@@ -10,7 +9,6 @@ import org.camunda.community.rest.client.api.ProcessDefinitionApi;
 import org.camunda.community.rest.client.dto.*;
 import org.camunda.community.rest.client.invoker.ApiException;
 import org.camunda.community.rest.client.springboot.CamundaHistoryApi;
-import org.h2.util.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 
@@ -83,18 +81,14 @@ public class CamundaRestAPIController {
 
         startProcessInstanceDto.setBusinessKey(businessKey);
 
-        try {
-            ProcessInstanceWithVariablesDto processInstance = processDefinitionApi.startProcessInstanceByKey(
-                    key,
-                    startProcessInstanceDto);
-            return ResponseEntity
-                    .status(HttpStatus.OK)
-                    .body("Started process instance with id: " + processInstance.getId())
-                    .toString();
-        }catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        ProcessInstanceWithVariablesDto processInstance = processDefinitionApi.startProcessInstanceByKey(
+                key,
+                startProcessInstanceDto);
+
+        return ResponseEntity
+                .status(HttpStatus.OK)
+                .body("Started process instance with id: " + processInstance.getId())
+                .toString();
     }
 
     public String getActiveProcessInstances() throws ApiException {
@@ -117,9 +111,9 @@ public class CamundaRestAPIController {
 
         StringBody profile = new StringBody(
                 "{\"id\": \"" + id + "\",\n" +
-                "  \"firstName\":\"" + firstName + "\",\n" +
-                "  \"lastName\":\"" + lastName + "\",\n" +
-                "  \"email\":\"" + email + "\"}"
+                        "  \"firstName\":\"" + firstName + "\",\n" +
+                        "  \"lastName\":\"" + lastName + "\",\n" +
+                        "  \"email\":\"" + email + "\"}"
                 , ContentType.APPLICATION_JSON);
 
         String url = ENGINE + "user/create";
@@ -130,4 +124,47 @@ public class CamundaRestAPIController {
 
         return RequestSender.POST(url, body);
     }
+
+    public String claimTask(String taskId, String userId) throws IOException {
+        String url = ENGINE + "task/" + taskId + "/claim";
+
+        StringBody userIdBody = new StringBody(userId, ContentType.TEXT_PLAIN);
+
+        MultipartEntityBuilder body = MultipartEntityBuilder.create()
+                .addPart("userId", userIdBody);
+
+        return RequestSender.POST(url, body);
+    }
+
+    public String completeTask(String taskId,
+                               HashMap<String, VariableValueDto> variables) throws IOException {
+        MultipartEntityBuilder multipartVariables = getMultipartVariables(variables);
+        String url = ENGINE + "task/" + taskId + "/complete";
+        return RequestSender.POST(url, multipartVariables);
+    }
+
+    private MultipartEntityBuilder getMultipartVariables(HashMap<String, VariableValueDto> variables) {
+        CompleteTaskDto completeTaskDto =
+                new CompleteTaskDto().variables(variables);
+
+        completeTaskDto.setWithVariablesInReturn(true);
+
+        StringBody variablesBody = new StringBody(
+                toIndentedString(completeTaskDto.getVariables().toString()),
+                ContentType.TEXT_PLAIN);
+
+        StringBody withVariablesBody = new StringBody(
+                toIndentedString(completeTaskDto.getWithVariablesInReturn().toString()),
+                ContentType.TEXT_PLAIN);
+
+        return MultipartEntityBuilder.create()
+                .addPart("variables", variablesBody)
+                .addPart("withVariablesInReturn", withVariablesBody);
+    }
+
+    private String toIndentedString(Object o) {
+        return o == null ? "null" : o.toString().replace("\n", "\n    ");
+    }
+
+
 }

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Login</title>
+</head>
+
+<style>
+    select {
+        height: 30px;
+        width: 25%;
+        font-size: medium;
+    }
+
+    input {
+        height: 30px;
+        width: 25%;
+        font-size: medium;
+    }
+</style>
+
+<body>
+<div style="text-align: center;">
+    <h1>Login</h1>
+
+    <form th:action="@{login}" method="post">
+        <p>
+            <input type="text" th:name="username" placeholder="Username" size=40%>
+        </p>
+        <p>
+            <input type="text" th:name="password" placeholder="Password" size="40%">
+
+        </p>
+        <p>
+            <input type="submit" value="Login">
+        </p>
+    </form>
+
+    <form th:action="@{create-user}" method="get">
+        <p>
+            <input type="submit" value="Go to create user page">
+        </p>
+    </form>
+
+    <p th:if="${error == 'Password is wrong'}" class="error">Password is wrong</p>
+    <p th:if="${error == 'Username not found'}" class="error">Username not found</p>
+</div>
+</body>
+</html>

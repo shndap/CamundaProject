@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 
 @org.springframework.stereotype.Controller
-@RequestMapping("/myApi")
+@RequestMapping("/taskApi")
 public class FormAssignerRestController {
     @Autowired
     private final FormAssignerServiceImpl formAssignerService;

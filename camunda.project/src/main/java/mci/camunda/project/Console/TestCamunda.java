@@ -21,6 +21,12 @@ public class TestCamunda {
                 new CamundaHistoryApi()
         );
 
+//        System.out.println(controller.createUser("me",
+//                "sahand",
+//                "akramipour",
+//                "s@g.com",
+//                "sahand"));
+
         Scanner scanner = new Scanner(System.in);
         System.out.println("---------------------------------------------");
         while (true) {
@@ -37,10 +43,32 @@ public class TestCamunda {
                 String key = matcher.group("key");
                 String businessKey = matcher.group("businessKey");
                 start(key, businessKey);
+            } else if (line.contains("claim")) {
+                Pattern pattern = Pattern.compile("claim (?<key>\\w+) (?<user>\\w+)");
+                Matcher matcher = pattern.matcher(line);
+                matcher.find();
+                String key = matcher.group("key");
+                String user = matcher.group("user");
+                claim(user, key);
+            } else if (line.contains("complete")) {
+                Pattern pattern = Pattern.compile("complete (?<key>\\w+) (?<user>\\w+)");
+                Matcher matcher = pattern.matcher(line);
+                matcher.find();
+                String key = matcher.group("key");
+                String user = matcher.group("user");
+//                complete(user, key);
             } else {
                 System.out.println("Invalid");
             }
         }
+    }
+
+//    private static void complete(String user, String key) {
+//        System.out.println(controller.completeTask());
+//    }
+
+    private static void claim(String user, String key) throws IOException {
+        System.out.println(controller.claimTask(user, key));
     }
 
     private static void start(String key, String businessKey) throws ApiException {

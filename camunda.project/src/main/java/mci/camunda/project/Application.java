@@ -18,7 +18,7 @@ public class Application {
     public static void main(String[] args) throws IOException, ApiException {
         SpringApplication.run(Application.class, args);
 
-        TestCamunda.run();
+//        TestCamunda.run();
     }
 
 }

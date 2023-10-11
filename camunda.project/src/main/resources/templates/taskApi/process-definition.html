@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Menu</title>
+</head>
+
+<link href="css/style.css" rel="stylesheet"/>
+
+<body>
+<div style="text-align: center;">
+    <h1>UserMenu</h1>
+    <h2 th:text="${username}"/></h2>
+
+    <form th:action="@{update-instances}" method="get">
+        <p>
+            <select class="form-control" th:id="process">
+                <option value="0">select process</option>
+                <option th:each="process : ${processes}" th:value="${process}" th:text="${process}"></option>
+            </select>
+        </p>
+
+        <p>
+            <input type="submit" value="Select">
+        </p>
+    </form>
+
+    <form th:action="@{logout}" method="get">
+        <p>
+            <input type="submit" value="Logout">
+        </p>
+    </form>
+
+    <p th:if="${error != ''}" class="error" th:text="${error}"/>
+</div>
+</body>
+</html>
+

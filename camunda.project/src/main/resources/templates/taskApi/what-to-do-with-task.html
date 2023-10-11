@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>User Menu</title>
+</head>
+
+<style>
+  select {
+    height: 30px;
+    width: 25%;
+    font-size: medium;
+  }
+
+  input {
+    height: 30px;
+    width: 25%;
+    font-size: medium;
+  }
+</style>
+
+<body>
+<div style="text-align: center;">
+  <h1>UserMenu</h1>
+  <h2 th:text="${username}"/></h2>
+  <h2 th:text="${selectedProcess}"/></h2>
+  <h2 th:text="${selectedInstance}"/></h2>
+  <h2 th:text="${selectedTask}"/></h2>
+
+  <form th:action="@{claim-task}" method="post">
+    <p>
+      <input type="submit" value="Claim">
+    </p>
+  </form>
+
+  <form th:action="@{complete-task}" method="post">
+    <p>
+      <input type="submit" value="Complete">
+    </p>
+  </form>
+
+  <form th:action="@{user-menu}" method="get">
+    <p>
+      <input type="submit" value="Abort">
+    </p>
+  </form>
+
+  <p th:if="${error != ''}" class="error" th:text="${error}"/>
+</div>
+</body>
+</html>
+

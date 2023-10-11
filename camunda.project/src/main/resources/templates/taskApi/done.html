@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Result</title>
+</head>
+
+<style>
+    input {
+        height: 30px;
+        width: 25%;
+        font-size: medium;
+    }
+</style>
+
+<body>
+<div style="text-align: center;">
+    <h1 th:text="${result}"></h1>
+    <h2 th:text="${username}"/>
+    <h2 th:text="${selectedProcess}"/>
+    <h2 th:text="${selectedInstance}"/></h2>
+    <h2 th:text="${selectedTask}"/></h2>
+    <form th:action="@{user-menu}" method="get">
+        <p>
+            <input type="submit" value="Back to user menu">
+        </p>
+    </form>
+</div>
+</body>
+</html>

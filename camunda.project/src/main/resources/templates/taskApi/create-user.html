@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <title>Create User</title>
+</head>
+
+<style>
+  select {
+    height: 30px;
+    width: 25%;
+    font-size: medium;
+  }
+
+  input {
+    height: 30px;
+    width: 25%;
+    font-size: medium;
+  }
+</style>
+
+<body>
+<div style="text-align: center;">
+  <h1>Create User</h1>
+
+  <form th:action="@{create-user}" method="post">
+    <p>
+      <input type="text" th:name="id" placeholder="Username" size=40%>
+    </p>
+    <p>
+      <input type="text" th:name="firstName" placeholder="First Name" size=40%>
+    </p>
+    <p>
+      <input type="text" th:name="lastName" placeholder="Last Name" size=40%>
+    </p>
+    <p>
+      <input type="email" th:name="email" placeholder="Email" size=40%>
+    </p>
+    <p>
+      <input type="password" th:name="password" placeholder="Password" size="40%">
+    </p>
+    <p>
+      <input type="password" th:name="passwordRepeat" placeholder="Repeat Password" size="40%">
+    </p>
+
+    <p>
+      <input type="submit" value="Create user">
+    </p>
+  </form>
+
+  <form th:action="@{login}" method="get">
+    <p>
+      <input type="submit" value="Go to login page">
+    </p>
+  </form>
+
+  <p th:if="${errorUserName}" class="error">Username already exists</p>
+  <p th:if="${errorPassword}" class="error">Passwords do not match</p>
+  <p th:if="${error}" class="error">An error occurred</p>
+</div>
+</body>
+</html>

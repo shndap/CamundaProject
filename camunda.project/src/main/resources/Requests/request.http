@@ -1,0 +1,14 @@
+POST localhost:8080/engine-rest/user/create
+Content-Type: application/json
+
+{
+  "profile": {
+    "id": "haha",
+    "firstName": "sahand",
+    "lastName": "ap",
+    "email": "s@g.c"
+  },
+  "credentials": {
+    "password": "salam"
+  }
+}

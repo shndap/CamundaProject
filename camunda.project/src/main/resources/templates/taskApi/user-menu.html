@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>User Menu</title>
+</head>
+
+<style>
+    select {
+        height: 30px;
+        width: 25%;
+        font-size: medium;
+    }
+
+    input {
+        height: 30px;
+        width: 25%;
+        font-size: medium;
+    }
+</style>
+
+
+
+<body>
+<div style="text-align: center;">
+    <h1>UserMenu</h1>
+    <h2 th:text="${username}"/>
+    <h2 th:text="${selectedProcess}"/>
+    <h2 th:text="${selectedInstance}"/></h2>
+    <h2 th:text="${selectedTask}"/></h2>
+
+
+    <p>
+        <select class="form-control" th:id="process" onchange="selectedProcess();">
+            <option value="0">select process</option>
+            <option th:selected="${selectedProcess == process}" th:each="process : ${processes}" th:value="${process}" th:text="${process}"></option>
+        </select>
+
+    </p>
+    <p>
+        <select class="form-control" th:id="instance" onchange="selectedInstance();">
+            <option value="0">select instance</option>
+            <option th:selected="${selectedInstance == instance}" th:each="instance : ${instances}" th:value="${instance}" th:text="${instance}"></option>
+        </select>
+    </p>
+    <p>
+        <select class="form-control" th:id="task" onchange="selectedTask();">
+            <option value="0">select task</option>
+            <option th:selected="${selectedTask == task}" th:each="task : ${tasks}" th:value="${task}" th:text="${task}"></option>
+        </select>
+    </p>
+
+    <form th:action="@{logout}" method="get">
+        <p>
+            <input type="submit" value="Logout">
+        </p>
+    </form>
+
+    <p th:if="${error != ''}" class="error" th:text="${error}"/>
+
+    <script>
+        function selectedProcess() {
+            let processOptions = document.getElementById("process");
+            let process = processOptions.options[processOptions.selectedIndex].value;
+            window.location = 'update-instances?process=' + process;
+        }
+
+        function selectedInstance() {
+            let instanceOptions = document.getElementById("instance");
+            let instance = instanceOptions.options[instanceOptions.selectedIndex].value;
+            window.location = 'update-tasks?instance=' + instance;
+        }
+
+        function selectedTask() {
+            let taskOptions = document.getElementById("task");
+            let task = taskOptions.options[taskOptions.selectedIndex].value;
+            window.location = 'selected-task?task=' + task;
+        }
+    </script>
+</div>
+</body>
+</html>
+
